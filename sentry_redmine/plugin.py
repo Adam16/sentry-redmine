@@ -26,10 +26,11 @@ class RedmineOptionsForm(forms.Form):
     key = forms.CharField(widget=forms.TextInput(attrs={'class': 'span9'}))
     project_id = forms.CharField(widget=forms.TextInput(attrs={'class': 'span9'}))
     tracker_id = forms.CharField(widget=forms.TextInput(attrs={'class': 'span9'}))
+    verify_ssl = forms.BooleanField(widget=forms.CheckboxInput(), initial=True)
 
     def clean(self):
         config = self.cleaned_data
-        if not all(config.get(k) for k in ('host', 'key', 'project_id', 'tracker_id')):
+        if not all(config.get(k) for k in ('host', 'key', 'project_id', 'tracker_id', 'verify_ssl')):
             raise forms.ValidationError('Missing required configuration value')
         return config
 
@@ -108,7 +109,7 @@ class RedminePlugin(IssuePlugin):
         #print >> sys.stderr, pformat(dir(group))
 
         try:
-            r = requests.post(url, data=json.dumps({'issue': payload}), headers=headers)
+            r = requests.post(url, data=json.dumps({'issue': payload}), headers=headers, verify=self.get_option('verify_ssl', group.project))
         except requests.exceptions.HTTPError as e:
             raise forms.ValidationError('Unable to reach Redmine host: %s' % repr(e))
 
