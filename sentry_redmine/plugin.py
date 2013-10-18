@@ -26,7 +26,7 @@ class RedmineOptionsForm(forms.Form):
     key = forms.CharField(widget=forms.TextInput(attrs={'class': 'span9'}))
     project_id = forms.CharField(widget=forms.TextInput(attrs={'class': 'span9'}))
     tracker_id = forms.CharField(widget=forms.TextInput(attrs={'class': 'span9'}))
-    verify_ssl = forms.BooleanField(widget=forms.CheckboxInput(), initial=True)
+    verify_ssl = forms.BooleanField(widget=forms.CheckboxInput(), initial=True, help_text=_("Check a host’s SSL certificate?"))
 
     def clean(self):
         config = self.cleaned_data
@@ -58,7 +58,7 @@ class RedminePlugin(IssuePlugin):
     new_issue_form = RedmineNewIssueForm
 
     def is_configured(self, project, **kwargs):
-        return all((self.get_option(k, project) for k in ('host', 'key', 'project_id', 'tracker_id')))
+        return all((self.get_option(k, project) for k in ('host', 'key', 'project_id', 'tracker_id', 'verify_ssl')))
 
     def get_new_issue_title(self, **kwargs):
         return 'Create Redmine Task'
@@ -95,6 +95,7 @@ class RedminePlugin(IssuePlugin):
         """Create a Redmine issue"""
         headers = { "X-Redmine-API-Key": self.get_option('key', group.project),
                     'content-type': 'application/json' }
+        verifySSL = self.get_option('verify_ssl', group.project)
         url = urlparse.urljoin(self.get_option('host', group.project), "issues.json")
         payload = {
             'project_id': self.get_option('project_id', group.project),
@@ -109,7 +110,7 @@ class RedminePlugin(IssuePlugin):
         #print >> sys.stderr, pformat(dir(group))
 
         try:
-            r = requests.post(url, data=json.dumps({'issue': payload}), headers=headers, verify=self.get_option('verify_ssl', group.project))
+            r = requests.post(url, data=json.dumps({'issue': payload}), headers=headers, verify=verifySSL)
         except requests.exceptions.HTTPError as e:
             raise forms.ValidationError('Unable to reach Redmine host: %s' % repr(e))
 
