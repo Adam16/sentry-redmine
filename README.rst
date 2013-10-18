@@ -4,6 +4,12 @@ sentry-redmine
 An extension for Sentry which integrates with Redmine. Specifically, it allows you to easily create
 Redmine issues from events within Sentry.
 
+Add ssl verification option
+-------
+
+Requests verify SSL certificates for HTTPS requests. 
+The problem you are having is likely caused by an self generated SSL certificate. 
+
 
 Install
 -------
