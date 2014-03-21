@@ -42,12 +42,12 @@ class RedmineNewIssueForm(forms.Form):
 
 class RedminePlugin(IssuePlugin):
     author = 'Idea Device'
-    author_url = 'https://github.com/ideadevice/sentry-redmine'
-    version = '0.1.0'
-    description = "Integrate Redmine issue tracking by linking a user account to a project."
+    author_url = 'https://github.com/Adam16/sentry-redmine'
+    version = '0.2.0'
+    description = 'Integrate Redmine issue tracking by linking a user account to a project.'
     resource_links = [
-        ('Bug Tracker', 'https://github.com/ideadevice/sentry-redmine/issues'),
-        ('Source', 'https://github.com/ideadevice/sentry-redmine'),
+        ('Bug Tracker', 'https://github.com/Adam16/sentry-redmine/issues'),
+        ('Source', 'https://github.com/Adam16/sentry-redmine'),
     ]
 
     slug = 'redmine'
