@@ -24,7 +24,7 @@ install_requires = [
 
 setup(
     name='sentry-redmine',
-    version='0.1.0',
+    version='0.2.0',
     author='Aaditya Sood, Adam Balachowski',
     author_email='a@ideadevice.com',
     url='https://github.com/Adam16/sentry-redmine',
